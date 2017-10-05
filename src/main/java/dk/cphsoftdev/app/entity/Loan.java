@@ -13,10 +13,9 @@ public class Loan
     {
     }
 
-    public Loan(String ssn, int creditScore, double amount, Date duration)
+    public Loan(String ssn, double amount, Date duration)
     {
         this.ssn = ssn;
-        this.creditScore = creditScore;
         this.amount = amount;
         this.duration = duration;
     }
