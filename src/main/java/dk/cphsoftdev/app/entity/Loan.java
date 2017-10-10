@@ -1,8 +1,9 @@
 package dk.cphsoftdev.app.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Loan
+public class Loan implements Serializable
 {
     private String ssn;
     private int creditScore;

@@ -1,8 +1,11 @@
 package dk.cphsoftdev.app.controller;
 
 import com.rabbitmq.client.*;
+import dk.cphsoftdev.app.entity.Loan;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.concurrent.TimeoutException;
 
 public class ReceiveController
@@ -87,6 +90,11 @@ public class ReceiveController
             {
                 String message = new String( body, "UTF-8" );
                 System.out.println( " [x] Received '" + message + "'" );
+
+                ObjectParser parser = new ObjectParser();
+                Loan loan = parser.jsonToObject( message, Loan.class );
+
+                System.out.println(loan.getCreditScore());
             }
         };
 

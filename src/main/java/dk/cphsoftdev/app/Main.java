@@ -14,10 +14,10 @@ public class Main
         Loan loan = new ObjectFactory().createLoan( "120985-2354", 250000, new Date() );
         System.out.println( "Credit Score: " + loan.getCreditScore() );
 
-        SenderController sender = new SenderController( "que578", "datdb.cphbusiness.dk", "guest" );
-        ReceiveController receive = new ReceiveController( "que578", "datdb.cphbusiness.dk", "guest" );
+        SenderController sender = new SenderController( "que55", "datdb.cphbusiness.dk", "guest" );
+        ReceiveController receive = new ReceiveController( "que55", "datdb.cphbusiness.dk", "guest" );
 
-        System.out.println( sender.sendMessage( loan.toString() ) );
+        System.out.println( sender.sendMessage( loan ) );
         receive.printMessages();
     }
 }

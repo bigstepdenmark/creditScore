@@ -3,8 +3,11 @@ package dk.cphsoftdev.app.controller;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.Channel;
+import dk.cphsoftdev.app.entity.Loan;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.concurrent.TimeoutException;
 
 public class SenderController
@@ -27,13 +30,13 @@ public class SenderController
     }
 
 
-    public String sendMessage(String message)
+    public String sendMessage(Loan loan)
     {
         String response = "Message could not be sent!";
 
         try
         {
-            response = basicPublish( message );
+            response = basicPublish( loan );
         }
         catch( IOException e )
         {
@@ -81,12 +84,13 @@ public class SenderController
         return false;
     }
 
-    private String basicPublish(String message) throws IOException
+    private String basicPublish(Loan loan) throws IOException
     {
+        ObjectParser parser = new ObjectParser();
         channel.queueDeclare( queueName, false, false, false, null );
-        channel.basicPublish( "", queueName, null, message.getBytes() );
+        channel.basicPublish( "", queueName, null, parser.objectToJsonString( loan ).getBytes() );
 
-        return " [x] Sent '" + message + "'";
+        return " [x] Sent '" + loan + "'";
     }
 
     private boolean createFactory()
