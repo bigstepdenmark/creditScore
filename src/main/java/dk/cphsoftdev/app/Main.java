@@ -11,13 +11,11 @@ public class Main
 {
     public static void main(String[] args)
     {
-        Loan loan = new ObjectFactory().createLoan( "120985-2354", 250000, new Date() );
-        System.out.println( "Credit Score: " + loan.getCreditScore() );
-
         SenderController sender = new SenderController( "que55", "datdb.cphbusiness.dk", "guest" );
-        ReceiveController receive = new ReceiveController( "que55", "datdb.cphbusiness.dk", "guest" );
+        ReceiveController receiver = new ReceiveController( "que55", "datdb.cphbusiness.dk", "guest" );
 
-        System.out.println( sender.sendMessage( loan ) );
-        receive.printMessages();
+        Loan loan = new ObjectFactory().createLoan( "120985-2354", 250000, new Date() );
+        sender.sendMessage( loan );
+        receiver.printMessages();
     }
 }

@@ -7,6 +7,7 @@ public class LoanController
 {
     /**
      * Get credit score by given SSN number.
+     *
      * @param loan Loan
      * @return int
      */

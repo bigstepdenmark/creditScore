@@ -9,8 +9,9 @@ public class ObjectFactory
 {
     /**
      * Create an instance of {@link Loan} and set credit score
-     * @param ssn String
-     * @param amount double
+     *
+     * @param ssn      String
+     * @param amount   double
      * @param duration Date
      * @return Loan
      */

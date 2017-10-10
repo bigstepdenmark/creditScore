@@ -1,11 +1,8 @@
 package dk.cphsoftdev.app.controller;
 
 import com.rabbitmq.client.*;
-import dk.cphsoftdev.app.entity.Loan;
-import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.concurrent.TimeoutException;
 
 public class ReceiveController
@@ -26,6 +23,9 @@ public class ReceiveController
         connect();
     }
 
+    /**
+     * Print received messages
+     */
     public void printMessages()
     {
         try
@@ -38,6 +38,11 @@ public class ReceiveController
         }
     }
 
+    /**
+     * Create Factory, connection and channel
+     *
+     * @return boolean
+     */
     public boolean connect()
     {
         try
@@ -56,6 +61,10 @@ public class ReceiveController
         return false;
     }
 
+    /**
+     * Close channel and connection
+     * @return boolean
+     */
     public boolean close()
     {
         try
@@ -76,31 +85,38 @@ public class ReceiveController
         return false;
     }
 
+    /**
+     * Handle delivered messages
+     * @throws IOException
+     */
     private void handleDelivery() throws IOException
     {
         channel.queueDeclare( queueName, false, false, false, null );
-        System.out.println( " [*] Waiting for messages. To exit press CTRL+C" );
+        System.out.println( "\nWaiting for messages. To exit press CTRL+C" );
+        System.out.println( "====================================================" );
 
         Consumer consumer = new DefaultConsumer( channel )
         {
             @Override
-            public void handleDelivery(String consumerTag, Envelope envelope,
-                                       AMQP.BasicProperties properties, byte[] body)
-                    throws IOException
+            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException
             {
                 String message = new String( body, "UTF-8" );
-                System.out.println( " [x] Received '" + message + "'" );
+                System.out.println( "[Received] --> '" + message + "'" );
 
-                ObjectParser parser = new ObjectParser();
-                Loan loan = parser.jsonToObject( message, Loan.class );
-
-                System.out.println(loan.getCreditScore());
+                // Get message attributes ( EXAMPLE )
+                MessageController messageController = new MessageController( message );
+                System.out.println( "SSN: " + messageController.getAttribute( "ssn" ).asText() );
+                System.out.println( "Credit Score: " + messageController.getAttribute( "creditScore" ).asInt() );
             }
         };
 
         channel.basicConsume( queueName, true, consumer );
     }
 
+    /**
+     * Create and set Factory properties
+     * @return boolean
+     */
     private boolean createFactory()
     {
         if( factory == null )
@@ -121,6 +137,12 @@ public class ReceiveController
         return factory.getHost().equals( hostname );
     }
 
+    /**
+     * Create Connection
+     * @return boolean
+     * @throws IOException
+     * @throws TimeoutException
+     */
     private boolean newConnection() throws IOException, TimeoutException
     {
         if( connection == null )
@@ -129,6 +151,12 @@ public class ReceiveController
         return connection.isOpen();
     }
 
+    /**
+     * Create Channel
+     * @return boolean
+     * @throws IOException
+     * @throws TimeoutException
+     */
     private boolean createChannel() throws IOException, TimeoutException
     {
         if( channel == null )

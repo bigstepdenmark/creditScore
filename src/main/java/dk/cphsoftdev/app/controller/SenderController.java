@@ -4,10 +4,8 @@ import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.Channel;
 import dk.cphsoftdev.app.entity.Loan;
-import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.concurrent.TimeoutException;
 
 public class SenderController
@@ -30,7 +28,12 @@ public class SenderController
     }
 
 
-    public String sendMessage(Loan loan)
+    /**
+     * Send message
+     *
+     * @param loan Loan
+     */
+    public void sendMessage(Loan loan)
     {
         String response = "Message could not be sent!";
 
@@ -43,9 +46,14 @@ public class SenderController
             e.printStackTrace();
         }
 
-        return response;
+        System.out.println( response );
     }
 
+    /**
+     * Create Factory, connection and channel
+     *
+     * @return boolean
+     */
     public boolean connect()
     {
         try
@@ -64,6 +72,11 @@ public class SenderController
         return false;
     }
 
+    /**
+     * Close channel and connection
+     *
+     * @return boolean
+     */
     public boolean close()
     {
         try
@@ -84,15 +97,27 @@ public class SenderController
         return false;
     }
 
+    /**
+     * Declare queue and publish message to channel
+     *
+     * @param loan Loan
+     * @return String
+     * @throws IOException
+     */
     private String basicPublish(Loan loan) throws IOException
     {
-        ObjectParser parser = new ObjectParser();
+        MessageController messageController = new MessageController( loan );
         channel.queueDeclare( queueName, false, false, false, null );
-        channel.basicPublish( "", queueName, null, parser.objectToJsonString( loan ).getBytes() );
+        channel.basicPublish( "", queueName, null, messageController.asByteArray() );
 
-        return " [x] Sent '" + loan + "'";
+        return "[Sent] --> '" + messageController.asString() + "'";
     }
 
+    /**
+     * Create and set Factory properties
+     *
+     * @return boolean
+     */
     private boolean createFactory()
     {
         if( factory == null )
@@ -113,6 +138,13 @@ public class SenderController
         return factory.getHost().equals( hostname );
     }
 
+    /**
+     * Create Connection
+     *
+     * @return boolean
+     * @throws IOException
+     * @throws TimeoutException
+     */
     private boolean newConnection() throws IOException, TimeoutException
     {
         if( connection == null )
@@ -121,6 +153,13 @@ public class SenderController
         return connection.isOpen();
     }
 
+    /**
+     * Create Channel
+     *
+     * @return boolean
+     * @throws IOException
+     * @throws TimeoutException
+     */
     private boolean createChannel() throws IOException, TimeoutException
     {
         if( channel == null )
