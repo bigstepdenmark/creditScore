@@ -104,9 +104,9 @@ public class ReceiveController
                 System.out.println( "[Received] --> '" + message + "'" );
 
                 // Get message attributes ( EXAMPLE )
-                MessageController messageController = new MessageController( message );
-                System.out.println( "SSN: " + messageController.getAttribute( "ssn" ).asText() );
-                System.out.println( "Credit Score: " + messageController.getAttribute( "creditScore" ).asInt() );
+                MessageController mc = new MessageController( message );
+                System.out.println( "SSN: " + mc.getAttribute( "ssn" ).asText() );
+                System.out.println( "Credit Score: " + mc.getAttribute( "creditScore" ).asInt() );
             }
         };
 

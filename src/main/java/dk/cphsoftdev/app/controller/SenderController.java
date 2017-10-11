@@ -106,11 +106,11 @@ public class SenderController
      */
     private String basicPublish(Loan loan) throws IOException
     {
-        MessageController messageController = new MessageController( loan );
+        MessageController mc = new MessageController( loan );
         channel.queueDeclare( queueName, false, false, false, null );
-        channel.basicPublish( "", queueName, null, messageController.asByteArray() );
+        channel.basicPublish( "", queueName, null, mc.asByteArray() );
 
-        return "[Sent] --> '" + messageController.asString() + "'";
+        return "[Sent] --> '" + mc.asString() + "'";
     }
 
     /**
