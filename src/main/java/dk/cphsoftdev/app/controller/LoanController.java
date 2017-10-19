@@ -1,20 +1,19 @@
 package dk.cphsoftdev.app.controller;
 
 import dk.cphsoftdev.app.creditbureau.CreditScoreService_Service;
-import dk.cphsoftdev.app.entity.Loan;
 
 public class LoanController
 {
     /**
      * Get credit score by given SSN number.
      *
-     * @param loan Loan
+     * @param ssn String
      * @return int
      */
-    public int getCreditScore(Loan loan)
+    public int getCreditScore(String ssn)
     {
         CreditScoreService_Service service = new CreditScoreService_Service();
-        return service.getCreditScoreServicePort().creditScore( loan.getSsn() );
+        return service.getCreditScoreServicePort().creditScore( ssn );
     }
 
     /**

@@ -1,21 +1,27 @@
 package dk.cphsoftdev.app.entity;
 
-import java.util.Date;
-
 public class Loan
 {
     private String ssn;
     private int creditScore;
     private double amount;
-    private Date duration;
+    private int duration;
 
     public Loan()
     {
     }
 
-    public Loan(String ssn, double amount, Date duration)
+    public Loan( String ssn, double amount, int duration)
     {
         this.ssn = ssn;
+        this.amount = amount;
+        this.duration = duration;
+    }
+
+    public Loan( String ssn, int creditScore, double amount, int duration )
+    {
+        this.ssn = ssn;
+        this.creditScore = creditScore;
         this.amount = amount;
         this.duration = duration;
     }
@@ -50,12 +56,12 @@ public class Loan
         this.amount = amount;
     }
 
-    public Date getDuration()
+    public int getDuration()
     {
         return duration;
     }
 
-    public void setDuration(Date duration)
+    public void setDuration( int duration)
     {
         this.duration = duration;
     }

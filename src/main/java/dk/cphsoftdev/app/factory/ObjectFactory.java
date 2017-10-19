@@ -3,8 +3,6 @@ package dk.cphsoftdev.app.factory;
 import dk.cphsoftdev.app.controller.LoanController;
 import dk.cphsoftdev.app.entity.Loan;
 
-import java.util.Date;
-
 public class ObjectFactory
 {
     /**
@@ -12,14 +10,11 @@ public class ObjectFactory
      *
      * @param ssn      String
      * @param amount   double
-     * @param duration Date
+     * @param duration int
      * @return Loan
      */
-    public Loan createLoan(String ssn, double amount, Date duration)
+    public Loan createLoan( String ssn, double amount, int duration )
     {
-        Loan loan = new Loan( ssn, amount, duration );
-        loan.setCreditScore( new LoanController().getCreditScore( loan ) );
-
-        return loan;
+        return new Loan( ssn, new LoanController().getCreditScore( ssn ), amount, duration );
     }
 }

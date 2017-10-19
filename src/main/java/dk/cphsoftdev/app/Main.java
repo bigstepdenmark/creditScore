@@ -14,7 +14,7 @@ public class Main
         SenderController sender = new SenderController( "que55", "datdb.cphbusiness.dk", "guest" );
         ReceiveController receiver = new ReceiveController( "que55", "datdb.cphbusiness.dk", "guest" );
 
-        Loan loan = new ObjectFactory().createLoan( "120985-2354", 250000, new Date() );
+        Loan loan = new ObjectFactory().createLoan( "120985-2354", 250000, 24 );
         sender.sendMessage( loan );
         receiver.printMessages();
     }
