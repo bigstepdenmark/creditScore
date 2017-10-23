@@ -2,7 +2,7 @@ package dk.cphsoftdev.app.controller;
 
 import dk.cphsoftdev.app.creditbureau.CreditScoreService_Service;
 
-public class LoanController
+public class CreditScore
 {
     /**
      * Get credit score by given SSN number.

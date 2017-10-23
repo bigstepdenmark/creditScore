@@ -1,10 +1,10 @@
 package dk.cphsoftdev.app.factory;
 
-import dk.cphsoftdev.app.controller.LoanController;
+import dk.cphsoftdev.app.controller.CreditScore;
 import dk.cphsoftdev.app.controller.Validator;
 import dk.cphsoftdev.app.entity.Loan;
 
-public class ObjectFactory
+public class Factory
 {
     /**
      * Create an instance of {@link Loan} and set credit score
@@ -16,7 +16,7 @@ public class ObjectFactory
      */
     public Loan createLoan( String ssn, double amount, int duration )
     {
-        return new Loan( ssn, new LoanController().getCreditScore( ssn ), amount, duration );
+        return new Loan( ssn, new CreditScore().getCreditScore( ssn ), amount, duration );
     }
 
     /**
@@ -29,7 +29,7 @@ public class ObjectFactory
         if( new Validator().isValid( commaSeparatedValues ) )
         {
             Loan loan = new Loan( commaSeparatedValues );
-            loan.setCreditScore( new LoanController().getCreditScore( loan.getSsn() ) );
+            loan.setCreditScore( new CreditScore().getCreditScore( loan.getSsn() ) );
             return loan;
         }
 

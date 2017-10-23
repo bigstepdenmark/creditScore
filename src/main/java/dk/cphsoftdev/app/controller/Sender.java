@@ -1,11 +1,14 @@
 package dk.cphsoftdev.app.controller;
 
-import com.rabbitmq.client.*;
+import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.Channel;
+import dk.cphsoftdev.app.entity.Loan;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
 
-public class ReceiveController
+public class Sender
 {
     private String queueName;
     private String hostname;
@@ -14,7 +17,8 @@ public class ReceiveController
     private Connection connection;
     Channel channel;
 
-    public ReceiveController( String queueName, String hostname, String username )
+
+    public Sender( String queueName, String hostname, String username)
     {
         this.queueName = queueName;
         this.hostname = hostname;
@@ -23,7 +27,7 @@ public class ReceiveController
         connect();
     }
 
-    public ReceiveController( String queueName )
+    public Sender( String queueName)
     {
         this.queueName = queueName;
         this.hostname = "datdb.cphbusiness.dk";
@@ -32,31 +36,26 @@ public class ReceiveController
         connect();
     }
 
+
     /**
-     * Print received messages
+     * Send message
+     *
+     * @param loan Loan
      */
-    public void printMessages()
+    public void sendMessage(Loan loan)
     {
+        String response = "Message could not be sent!";
+
         try
         {
-            handleDelivery();
+            response = basicPublish( loan );
         }
         catch( IOException e )
         {
             e.printStackTrace();
         }
-    }
 
-    public String getMessage()
-    {
-        try
-        {
-            return handleDelivery();
-        }
-        catch( IOException e )
-        {
-            return null;
-        }
+        System.out.println( response );
     }
 
     /**
@@ -70,11 +69,7 @@ public class ReceiveController
         {
             return createFactory() && newConnection() && createChannel();
         }
-        catch( IOException e )
-        {
-            e.printStackTrace();
-        }
-        catch( TimeoutException e )
+        catch( IOException | TimeoutException e )
         {
             e.printStackTrace();
         }
@@ -96,11 +91,7 @@ public class ReceiveController
 
             return true;
         }
-        catch( IOException e )
-        {
-            e.printStackTrace();
-        }
-        catch( TimeoutException e )
+        catch( IOException | TimeoutException e )
         {
             e.printStackTrace();
         }
@@ -108,34 +99,18 @@ public class ReceiveController
     }
 
     /**
-     * Handle delivered messages
+     * Declare queue and publish message to channel
      *
+     * @param loan Loan
      * @return String
      * @throws IOException
      */
-    private String handleDelivery() throws IOException
+    private String basicPublish(Loan loan) throws IOException
     {
-        StringBuilder builder = new StringBuilder();
-
         channel.queueDeclare( queueName, false, false, false, null );
-        System.out.println( "\nWaiting for messages. To exit press CTRL+C" );
-        System.out.println( "====================================================" );
+        channel.basicPublish( "", queueName, null, loan.toString().getBytes() );
 
-        Consumer consumer = new DefaultConsumer( channel )
-        {
-            @Override
-            public void handleDelivery( String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body ) throws IOException
-            {
-                String message = new String( body, "UTF-8" );
-                System.out.println( "[Received] --> '" + message + "'" );
-
-                builder.append( message );
-            }
-        };
-
-        channel.basicConsume( queueName, true, consumer );
-
-        return builder.toString();
+        return "[Sent] --> '" + loan.toString() + "'";
     }
 
     /**
