@@ -11,7 +11,7 @@ public class Loan
     {
     }
 
-    public Loan( String ssn, double amount, int duration)
+    public Loan( String ssn, double amount, int duration )
     {
         this.ssn = ssn;
         this.amount = amount;
@@ -26,12 +26,21 @@ public class Loan
         this.duration = duration;
     }
 
+    public Loan( String commaSeparatedValues )
+    {
+        String[] values = commaSeparatedValues.split( "," );
+
+        this.ssn = values[ 0 ];
+        this.amount = Double.parseDouble( values[ 1 ] );
+        this.duration = Integer.parseInt( values[ 2 ] );
+    }
+
     public String getSsn()
     {
         return ssn;
     }
 
-    public void setSsn(String ssn)
+    public void setSsn( String ssn )
     {
         this.ssn = ssn;
     }
@@ -41,7 +50,7 @@ public class Loan
         return creditScore;
     }
 
-    public void setCreditScore(int creditScore)
+    public void setCreditScore( int creditScore )
     {
         this.creditScore = creditScore;
     }
@@ -51,7 +60,7 @@ public class Loan
         return amount;
     }
 
-    public void setAmount(double amount)
+    public void setAmount( double amount )
     {
         this.amount = amount;
     }
@@ -61,7 +70,7 @@ public class Loan
         return duration;
     }
 
-    public void setDuration( int duration)
+    public void setDuration( int duration )
     {
         this.duration = duration;
     }
@@ -69,11 +78,6 @@ public class Loan
     @Override
     public String toString()
     {
-        return "Loan{" +
-                "ssn='" + ssn + '\'' +
-                ", creditScore=" + creditScore +
-                ", amount=" + amount +
-                ", duration=" + duration +
-                '}';
+        return ssn + "," + creditScore + "," + amount + "," + duration;
     }
 }

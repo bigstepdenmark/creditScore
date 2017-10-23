@@ -27,6 +27,15 @@ public class SenderController
         connect();
     }
 
+    public SenderController(String queueName)
+    {
+        this.queueName = queueName;
+        this.hostname = "datdb.cphbusiness.dk";
+        this.username = "guest";
+
+        connect();
+    }
+
 
     /**
      * Send message
@@ -60,11 +69,7 @@ public class SenderController
         {
             return createFactory() && newConnection() && createChannel();
         }
-        catch( IOException e )
-        {
-            e.printStackTrace();
-        }
-        catch( TimeoutException e )
+        catch( IOException | TimeoutException e )
         {
             e.printStackTrace();
         }
@@ -86,11 +91,7 @@ public class SenderController
 
             return true;
         }
-        catch( IOException e )
-        {
-            e.printStackTrace();
-        }
-        catch( TimeoutException e )
+        catch( IOException | TimeoutException e )
         {
             e.printStackTrace();
         }
@@ -106,11 +107,10 @@ public class SenderController
      */
     private String basicPublish(Loan loan) throws IOException
     {
-        MessageController mc = new MessageController( loan );
         channel.queueDeclare( queueName, false, false, false, null );
-        channel.basicPublish( "", queueName, null, mc.asByteArray() );
+        channel.basicPublish( "", queueName, null, loan.toString().getBytes() );
 
-        return "[Sent] --> '" + mc.asString() + "'";
+        return "[Sent] --> '" + loan.toString() + "'";
     }
 
     /**

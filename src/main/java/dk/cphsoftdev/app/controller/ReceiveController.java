@@ -14,11 +14,20 @@ public class ReceiveController
     private Connection connection;
     Channel channel;
 
-    public ReceiveController(String queueName, String hostname, String username)
+    public ReceiveController( String queueName, String hostname, String username )
     {
         this.queueName = queueName;
         this.hostname = hostname;
         this.username = username;
+
+        connect();
+    }
+
+    public ReceiveController( String queueName )
+    {
+        this.queueName = queueName;
+        this.hostname = "datdb.cphbusiness.dk";
+        this.username = "guest";
 
         connect();
     }
@@ -35,6 +44,18 @@ public class ReceiveController
         catch( IOException e )
         {
             e.printStackTrace();
+        }
+    }
+
+    public String getMessage()
+    {
+        try
+        {
+            return handleDelivery();
+        }
+        catch( IOException e )
+        {
+            return null;
         }
     }
 
@@ -63,6 +84,7 @@ public class ReceiveController
 
     /**
      * Close channel and connection
+     *
      * @return boolean
      */
     public boolean close()
@@ -87,10 +109,14 @@ public class ReceiveController
 
     /**
      * Handle delivered messages
+     *
+     * @return String
      * @throws IOException
      */
-    private void handleDelivery() throws IOException
+    private String handleDelivery() throws IOException
     {
+        StringBuilder builder = new StringBuilder();
+
         channel.queueDeclare( queueName, false, false, false, null );
         System.out.println( "\nWaiting for messages. To exit press CTRL+C" );
         System.out.println( "====================================================" );
@@ -98,23 +124,23 @@ public class ReceiveController
         Consumer consumer = new DefaultConsumer( channel )
         {
             @Override
-            public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException
+            public void handleDelivery( String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body ) throws IOException
             {
                 String message = new String( body, "UTF-8" );
                 System.out.println( "[Received] --> '" + message + "'" );
 
-                // Get message attributes ( EXAMPLE )
-                MessageController mc = new MessageController( message );
-                System.out.println( "SSN: " + mc.getAttribute( "ssn" ).asText() );
-                System.out.println( "Credit Score: " + mc.getAttribute( "creditScore" ).asInt() );
+                builder.append( message );
             }
         };
 
         channel.basicConsume( queueName, true, consumer );
+
+        return builder.toString();
     }
 
     /**
      * Create and set Factory properties
+     *
      * @return boolean
      */
     private boolean createFactory()
@@ -139,6 +165,7 @@ public class ReceiveController
 
     /**
      * Create Connection
+     *
      * @return boolean
      * @throws IOException
      * @throws TimeoutException
@@ -153,6 +180,7 @@ public class ReceiveController
 
     /**
      * Create Channel
+     *
      * @return boolean
      * @throws IOException
      * @throws TimeoutException
