@@ -13,7 +13,9 @@ public class CreditScore
     public int getCreditScore(String ssn)
     {
         CreditScoreService_Service service = new CreditScoreService_Service();
-        return service.getCreditScoreServicePort().creditScore( ssn );
+        String ssnDate = ssn.substring( 0, 6 );
+        String ssnCode = ssn.substring( 6 );
+        return service.getCreditScoreServicePort().creditScore( ssnDate + "-" + ssnCode );
     }
 
     /**

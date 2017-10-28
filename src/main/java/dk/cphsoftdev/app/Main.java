@@ -19,17 +19,20 @@ public class Main
 //        }
 
         // Production
-        Receiver receiver = new Receiver( "group3.loanrequest.creditscore" );
+        //Receiver receiver = new Receiver( "group3.loanrequest.creditscore" );
         Sender sender = new Sender( "group3.creditscore.getbanks" );
 
-        if( receiver.isReady() )
+        String dummy = "1209852398,125000.0,12";
+        sender.sendMessage( new Factory().createLoan( dummy ) );
+
+        /*if( receiver.isReady() )
         {
             receiver.printMessages();
             sender.sendMessage( new Factory().createLoan( receiver.getMessage() ) );
-        }
+        }*/
 
         // Close connections
-        receiver.close();
+        //receiver.close();
         sender.close();
     }
 }
