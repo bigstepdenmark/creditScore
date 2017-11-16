@@ -11,7 +11,7 @@ public class Main
     {
         if( new Validator().isValid( args[ 0 ] ) )
         {
-            Sender sender = new Sender( "group3.creditscore.getbanks" );
+            Sender sender = new Sender( args[1] );
             sender.sendMessage( new Factory().createLoan( args[ 0 ] ) );
             sender.close();
         }
