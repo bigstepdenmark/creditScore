@@ -19,15 +19,31 @@
         <dependency>
             <groupId>com.rabbitmq</groupId>
             <artifactId>amqp-client</artifactId>
-            <version>4.2.1</version>
+            <version>5.0.0</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.rabbitmq/rabbitmq-client -->
+        <!-- Resolve command line problem -->
+        <!--SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".-->
+        <!--SLF4J: Defaulting to no-operation (NOP) logger implementation-->
+        <!--SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.-->
         <dependency>
-            <groupId>com.rabbitmq</groupId>
-            <artifactId>rabbitmq-client</artifactId>
-            <version>1.3.0</version>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.5</version>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.5</version>
+        </dependency>
+        <!-- /Resolve command line problem -->
+
+        <!--&lt;!&ndash; https://mvnrepository.com/artifact/com.rabbitmq/rabbitmq-client &ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>com.rabbitmq</groupId>-->
+            <!--<artifactId>rabbitmq-client</artifactId>-->
+            <!--<version>1.3.0</version>-->
+        <!--</dependency>-->
     </dependencies>
 
     <build>
